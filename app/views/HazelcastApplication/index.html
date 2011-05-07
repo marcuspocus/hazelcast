@@ -1,0 +1,27 @@
+#{extends "HazelcastApplication/main.html" /}
+#{set title:'Home' /}
+<div class="content ui-widget">
+	<h1 id="ui-widget-header">Instance Config</h1>
+	<ul>
+		<li>Implementation Used: ${implementation}</li>
+	   	<li>Hazelcast Instance name is: ${name}</li>
+	   	<li>Hazelcast is listening on port ${port}</li>
+	</ul>
+	<h1 id="ui-widget-header">Maps</h1>
+	<ul>
+	   	#{list items: maps, as:'map'}
+		<li>${map.name}</li>
+		#{/list}
+	</ul>
+	<h1 id="ui-widget-header">Executors</h1>
+	<ul>
+	   	#{list items: executors, as:'executor'}
+		<li>Name: ${executor.name}</li>
+		<ul>
+		   <li>     Size: ${executor.corePoolSize}</li> 
+		   <li> Max Size: ${executor.maxPoolSize}</li> 
+		   <li>Keepalive: ${executor.keepAliveSeconds}</li> 
+		</ul>
+		#{/list}
+	</ul>
+</div>

@@ -1,0 +1,8 @@
+.classpath
+.settings
+.project
+dist
+eclipse
+tmp
+lib
+public
