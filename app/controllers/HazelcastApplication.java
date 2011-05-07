@@ -24,7 +24,7 @@ public class HazelcastApplication extends Controller {
 	
 	public static void index(){
 		if(cache == null){
-			renderText("Fucking cache is NULL!");
+			renderText("HazelcastInstance instance is NULL!");
 		}
 		
 		Cache.add("test", new Date());
@@ -35,7 +35,7 @@ public class HazelcastApplication extends Controller {
 		if(Cache.cacheImpl != null){
 			implementation = Cache.cacheImpl.getClass().getName();
 		}else{
-			implementation = "Why the fuck this thing is null...";
+			implementation = "Should not happen...";
 		}
 		String name = cache.getName();
 		String port = "" + cache.getConfig().getPort();
