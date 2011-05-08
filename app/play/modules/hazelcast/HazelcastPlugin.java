@@ -2,6 +2,7 @@ package play.modules.hazelcast;
 
 import play.Logger;
 import play.PlayPlugin;
+import play.cache.Cache;
 import play.inject.BeanSource;
 import play.inject.Injector;
 import play.mvc.Http.Request;
@@ -34,9 +35,10 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource {
 	public void onApplicationStop() {
 		try {
 			instance.shutdown();
+			instance = null;
 			Logger.info("Hazelcast Services are now stopped\n");
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 

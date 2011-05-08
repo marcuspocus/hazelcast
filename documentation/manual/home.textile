@@ -2,11 +2,13 @@ h1. Documentation for the Hazelcast module
 
 bq. This module is a dropin replacement for EhCacheImpl or MemcachedImpl from Play. 
 It allow primarily to have a clustered cache when you can't install a memcached server on your platform.
+It's also a great free open source *In-Memory Data Grid*
+
+See "Hazelcast Documentation":http://www.hazelcast.com/documentation.jsp for more details.
 
 h2. Installing Hazelcast Module
 
 p. To install Hazelcast Plugin module, you do like every other Play Modules:
-
 
 bc. play install hazelcast[-version]
 
@@ -15,16 +17,20 @@ h2. Using Hazelcast Module (Dependency management)
 h3. There is two way to use the module
 
 
-* The old way (*in application.conf*)
+* The Play 1.x way (*in application.conf*)
 bc. module.hazelcast=${play.path}/modules/hazelcast-[version]
 
-* The IVY way (*in dependencies.yml*)
+* The Play 1.2.x way (*in dependencies.yml*)
 bc. require:
 	- play -> hazelcast [version]
 
 h2. Using standard Play! Framework Cache Mechanisms
 
-p. See "Play Framework Cache Documentation":/@documentation/cache
+p. All the standard Play annotations can work with Hazelcast instead of EhCache or Memcached, just add this line in *application.conf*:
+
+bc. cache.class=play.cache.HazelcastCacheImpl
+
+See "Play Framework Cache Documentation":/@documentation/cache for *Cache.class* and annotations usage.
 
 
 h2. Using features from Hazelcast
@@ -34,3 +40,23 @@ h3. Using @Inject to inject an instance of Hazelcast in your controller
 bc.. 
 @Inject
 private static HazelcastInstance hazel;
+
+p. Hazelcast give you access to a number of clustered services
+
+* Distributed Queues (Entries are consumed by one and only one JVM)
+* Distributed Topics (Entries are consumed by all JVM)
+* Distributed Events
+* Distributed AtomicNumber provider
+* Distributed ExecutorService
+* Distributed ID Generator (ID are UNIQUE in all cluster nodes)
+* Distributed List (to share a list in the cluster between many JVM)
+* Distributed Lock (to apply a lock on an object and share between JVM)
+* Set
+* Distributed Map/MultiMap (Maps are shared between JMV, MultiMap allow for multiple values for the same key)
+* Distributed Transaction (_affect transactions on clustered objects, not database!_)
+
+h3. Configuration file *hazelcast.xml*
+
+You can modify *hazelcast.xml* to your need to create more Queues or Map and modify the default ExecutorService parameters.
+* Default name for the Map is "*default*"
+* Default name for the Queue is "*default*"
