@@ -18,7 +18,7 @@
     		<nav>
     			<a id="home" href="@{index()}" class="${request.action =~ /index/ ? 'selected' : ''}">Hazelcast</a>
     			<a id="home" href="@{Application.index()}" class="${request.action =~ /index/ ? 'selected' : ''}">Application</a>
-    			<a id="docs" href="/@documentation" target="_blank">Docs</a>
+    			<a id="docs" href="/@documentation/modules/hazelcast/home" target="_blank">Docs</a>
     		</nav>
     		<section>
     		    #{doLayout /}
