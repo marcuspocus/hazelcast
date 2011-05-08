@@ -1,6 +1,15 @@
+import javax.inject.Inject;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.HazelcastInstanceAware;
+import com.hazelcast.core.ITopic;
+import com.hazelcast.core.MessageListener;
+import com.hazelcast.core.Transaction;
 
 import play.cache.Cache;
 import play.test.UnitTest;
@@ -8,96 +17,46 @@ import play.test.UnitTest;
 
 public class TopicTest extends UnitTest {
 
-	@Before
-	public void before(){
-		Cache.clear();
+	private static HazelcastInstance hazel = Hazelcast.getDefaultInstance();
+	
+	@Test
+	public void testTopicSend(){
+		ITopic<String> topic = hazel.getTopic("myTopic");
+		topic.publish("testTopicSend");
+		topic.addMessageListener(new MessageListener<String>() {
+			public void onMessage(String msg) {
+				assertEquals("testTopicSend", msg);
+			}
+		});
 	}
 	
-	@After
-	public void after(){
-		Cache.clear();
+	@Test
+	public void testTopicSendTx(){
+		Transaction tx = hazel.getTransaction();
+		ITopic<String> topic = hazel.getTopic("testTopicSendTx");
+		tx.begin();
+		topic.publish("testTopicSendTx");
+		tx.commit();
+		topic.addMessageListener(new MessageListener<String>() {
+			public void onMessage(String msg) {
+				assertEquals("testTopicSendTx", msg);
+			}
+		});
+		
+	}
+	
+	@Test
+	public void testTopicSendTxRollback(){
+		Transaction tx = hazel.getTransaction();
+		ITopic<String> topic = hazel.getTopic("testTopicSendTx");
+		tx.begin();
+		topic.publish("testTopicSendTx");
+		tx.rollback();
+		topic.addMessageListener(new MessageListener<String>() {
+			public void onMessage(String msg) {
+				assertEquals("testTopicSendTx", msg);
+			}
+		});
 	}
 
-	@Test
-	public void testCache(){
-		Cache.add("test", "bidon");
-		String test = Cache.get("test", String.class);
-		assertEquals("bidon", test);
-	}
-	
-	@Test
-	public void testIncr(){
-		long a = Cache.incr("counteur");
-		assertTrue(a > 0);
-	}
-	
-	@Test
-	public void testDecr(){
-		long a = Cache.decr("counteur");
-		assertTrue(a == 0);
-	}
-
-	@Test
-	public void testIncrBy2(){
-		long a = Cache.incr("counteur", 2);
-		assertTrue(a == 2);
-	}
-	
-	@Test
-	public void testDecrBy2(){
-		long a = Cache.decr("counteur", 2);
-		assertTrue(a == 0);
-	}
-
-	@Test
-	public void testIncrBy10(){
-		long a = Cache.incr("counteur", 10);
-		assertTrue(a == 10);
-	}
-	
-	@Test
-	public void testDecrBy5(){
-		long a = Cache.decr("counteur", 5);
-		assertTrue(a == 5);
-	}
-	
-	@Test
-	public void testDecrBy5Again(){
-		long a = Cache.decr("counteur", 5);
-		assertTrue(a == 0);
-	}
-
-	@Test
-	public void testDelete(){
-		Cache.delete("counteur");
-		assertNull(Cache.get("counteur"));
-	}
-
-	@Test
-	public void testAddExisting(){
-		Cache.add("testAddExisting", "value1");
-		Cache.add("testAddExisting", "value2");
-		String actual = Cache.get("testAddExisting", String.class);
-		assertEquals("value1", actual);
-	}
-	
-	@Test
-	public void testReplace(){
-		Cache.add("testReplace", "value1");
-		Cache.replace("testReplace", "value2");
-		String actual = Cache.get("testReplace", String.class);
-		assertEquals("value2", actual);
-	}
-	
-	@Test
-	public void testExpiration(){
-		Cache.add("testExpiration", "testExpiration", "5s");
-		try {
-			Thread.sleep(5000);
-		} catch (Exception e) {
-		}
-		String actual = Cache.get("testExpiration", String.class);
-		assertNull(actual);
-	}
-	
 }

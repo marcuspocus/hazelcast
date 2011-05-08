@@ -38,7 +38,13 @@ public class HazelcastCacheImpl implements CacheImpl {
 	}
 
 	public void clear() {
-		cache.clear();
+		if(cache != null){
+			try {
+				cache.clear();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
 	}
 
 	public long decr(String key, int by) {
