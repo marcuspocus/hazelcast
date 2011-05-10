@@ -2,6 +2,8 @@ package play.modules.hazelcast;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
 import play.Logger;
@@ -14,10 +16,17 @@ import play.mvc.Http.Request;
 import play.mvc.Http.Response;
 import play.mvc.Router;
 
+import com.hazelcast.core.AtomicNumber;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
+import com.hazelcast.core.IQueue;
+import com.hazelcast.core.ISet;
+import com.hazelcast.core.ITopic;
+import com.hazelcast.core.IdGenerator;
+import com.hazelcast.core.MultiMap;
+import com.hazelcast.core.Transaction;
 
 public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBeanSource {
 
@@ -54,23 +63,6 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see play.inject.BeanSource#getBeanOfType(java.lang.Class)
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> T getBeanOfType(Class<T> clazz) {
-		if (clazz.equals(HazelcastInstance.class)) {
-			Logger.info("%s Injection...OK", clazz.getName());
-			return (T) instance;
-		}else if(clazz.equals(ExecutorService.class)){
-			return (T) instance.getExecutorService();
-		}
-		Logger.info("%s Injection...KO", clazz.getName());
-		return null;
-	}
-
 	@Override
 	public boolean rawInvocation(Request request, Response response) throws Exception {
 		if ("/@cache".equals(request.path)) {
@@ -86,17 +78,47 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 		Router.prependRoute("GET", "/@cache/?", "HazelcastApplication.index");
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see play.inject.BeanSource#getBeanOfType(java.lang.Class)
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T getBeanOfType(Class<T> clazz) {
+		if (clazz.equals(HazelcastInstance.class)) {
+			Logger.info("%s Injection...OK", clazz.getName());
+			return (T) instance;
+		}else if(clazz.equals(ExecutorService.class)){
+			return (T) instance.getExecutorService();
+		}else if(clazz.equals(Transaction.class)){
+			return (T) instance.getTransaction();
+		}
+		Logger.info("%s Injection...KO", clazz.getName());
+		return null;
+	}
+
 	/* (non-Javadoc)
 	 * @see play.inject.NamedBeanSource#getBeanOfType(java.lang.Class, java.lang.String)
 	 */
 	public <T> T getBeanOfType(Class<T> clazz, String name) {
 		if (clazz.equals(IMap.class) || clazz.equals(Map.class)) {
-			Logger.info("%s Injection...OK", clazz.getName());
 			return (T) instance.getMap(name);
 		}else if(clazz.equals(IList.class) || clazz.equals(List.class)){
 			return (T) instance.getList(name);
 		}else if(clazz.equals(ExecutorService.class)){
 			return (T) instance.getExecutorService(name);
+		}else if(clazz.equals(ISet.class) || clazz.equals(Set.class)){
+			return (T) instance.getSet(name);
+		}else if(clazz.equals(IdGenerator.class)){
+			return (T) instance.getIdGenerator(name);
+		}else if(clazz.equals(AtomicNumber.class)){
+			return (T) instance.getAtomicNumber(name);
+		}else if(clazz.equals(MultiMap.class)){
+			return (T) instance.getMultiMap(name);
+		}else if(clazz.equals(IQueue.class) || clazz.equals(Queue.class)){
+			return (T) instance.getQueue(name);
+		}else if(clazz.equals(ITopic.class)){
+			return (T) instance.getTopic(name);
 		}
 		Logger.info("%s Injection...KO", clazz.getName());
 		return null;
