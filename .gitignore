@@ -8,3 +8,4 @@ lib
 public
 commands.pyc
 app/play/cache/Cache.java.old
+test-result

@@ -1,21 +1,15 @@
-import javax.inject.Inject;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+
+import play.test.UnitTest;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.core.MessageListener;
 import com.hazelcast.core.Transaction;
 
-import play.cache.Cache;
-import play.test.UnitTest;
 
-
-public class TopicTest extends UnitTest {
+public class TopicTest extends UnitTest{
 
 	private static HazelcastInstance hazel = Hazelcast.getDefaultInstance();
 	

@@ -21,6 +21,10 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource {
 		try {
 			if (instance == null) {
 				instance = Hazelcast.getDefaultInstance();
+				if(!instance.getLifecycleService().isRunning()){
+					Logger.info("Hazelcast Services is restarting...\n");
+					instance.getLifecycleService().restart();
+				}
 				Logger.info("Hazelcast Services are now started...\n");
 			}
 
