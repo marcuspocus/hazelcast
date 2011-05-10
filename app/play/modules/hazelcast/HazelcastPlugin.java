@@ -1,5 +1,8 @@
 package play.modules.hazelcast;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import play.Logger;
 import play.PlayPlugin;
 import play.cache.Cache;
@@ -11,11 +14,12 @@ import play.mvc.Router;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
 
 public class HazelcastPlugin extends PlayPlugin implements BeanSource {
 
 	private static HazelcastInstance instance;
-	
+
 	@Override
 	public void onApplicationStart() {
 		try {
@@ -74,10 +78,6 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource {
 	@Override
 	public void onRoutesLoaded() {
 		Router.prependRoute("GET", "/@cache/?", "HazelcastApplication.index");
-	}
-
-	public static HazelcastInstance getHazelcastInstance() {
-		return instance;
 	}
 
 }
