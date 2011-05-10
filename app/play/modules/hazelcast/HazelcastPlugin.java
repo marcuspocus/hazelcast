@@ -1,22 +1,25 @@
 package play.modules.hazelcast;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 import play.Logger;
 import play.PlayPlugin;
-import play.cache.Cache;
 import play.inject.BeanSource;
 import play.inject.Injector;
+import play.inject.NamedBeanSource;
+import play.inject.NamedInjector;
 import play.mvc.Http.Request;
 import play.mvc.Http.Response;
 import play.mvc.Router;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
 
-public class HazelcastPlugin extends PlayPlugin implements BeanSource {
+public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBeanSource {
 
 	private static HazelcastInstance instance;
 
@@ -36,6 +39,7 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource {
 			throw new ExceptionInInitializerError(e);
 		}
 		Injector.inject(this);
+		NamedInjector.inject(this);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -60,6 +64,8 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource {
 		if (clazz.equals(HazelcastInstance.class)) {
 			Logger.info("%s Injection...OK", clazz.getName());
 			return (T) instance;
+		}else if(clazz.equals(ExecutorService.class)){
+			return (T) instance.getExecutorService();
 		}
 		Logger.info("%s Injection...KO", clazz.getName());
 		return null;
@@ -78,6 +84,22 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource {
 	@Override
 	public void onRoutesLoaded() {
 		Router.prependRoute("GET", "/@cache/?", "HazelcastApplication.index");
+	}
+
+	/* (non-Javadoc)
+	 * @see play.inject.NamedBeanSource#getBeanOfType(java.lang.Class, java.lang.String)
+	 */
+	public <T> T getBeanOfType(Class<T> clazz, String name) {
+		if (clazz.equals(IMap.class) || clazz.equals(Map.class)) {
+			Logger.info("%s Injection...OK", clazz.getName());
+			return (T) instance.getMap(name);
+		}else if(clazz.equals(IList.class) || clazz.equals(List.class)){
+			return (T) instance.getList(name);
+		}else if(clazz.equals(ExecutorService.class)){
+			return (T) instance.getExecutorService(name);
+		}
+		Logger.info("%s Injection...KO", clazz.getName());
+		return null;
 	}
 
 }
