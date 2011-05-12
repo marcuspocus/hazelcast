@@ -26,9 +26,7 @@ bc. require:
 
 h2. Using standard Play! Framework Cache Mechanisms
 
-p. All the standard Play annotations can work with Hazelcast instead of EhCache or Memcached, just add this line in *application.conf*:
-
-bc. cache.class=play.cache.HazelcastCacheImpl
+p. All the standard Play annotations can work with Hazelcast instead of EhCache or Memcached.
 
 See "Play Framework Cache Documentation":/@documentation/cache for *Cache.class* and annotations usage.
 
@@ -37,11 +35,18 @@ h2. Using features from Hazelcast
 
 h3. Using @Inject to inject an instance of Hazelcast in your controller
 
-bc.. 
-@Inject
-private static HazelcastInstance hazel;
+bc. @Inject private static HazelcastInstance hazel;
 
-p. Hazelcast give you access to a number of clustered services
+or
+
+bc. @Inject private static ExecutorService executor;
+
+h3. Using @Named to inject a named resource 
+
+bc. @Named("MyQueue") private static Queue myQueue;
+
+
+h2. Hazelcast clustered services
 
 * Distributed Queues (Entries are consumed by one and only one JVM)
 * Distributed Topics (Entries are consumed by all JVM)
