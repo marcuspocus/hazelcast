@@ -18,10 +18,12 @@ h3. There is two way to use the module
 
 
 * The Play 1.x way (*in application.conf*)
+
 bc. module.hazelcast=${play.path}/modules/hazelcast-[version]
 
 * The Play 1.2.x way (*in dependencies.yml*)
-bc. require:
+
+bc.. require:
 	- play -> hazelcast [version]
 
 h2. Using standard Play! Framework Cache Mechanisms
@@ -53,15 +55,36 @@ h2. Hazelcast clustered services
 * Distributed Events
 * Distributed AtomicNumber provider
 * Distributed ExecutorService
-* Distributed ID Generator (ID are UNIQUE in all cluster nodes)
+* Distributed ID Generator (_ID are UNIQUE in all cluster nodes_)
 * Distributed List (to share a list in the cluster between many JVM)
-* Distributed Lock (to apply a lock on an object and share between JVM)
-* Set
-* Distributed Map/MultiMap (Maps are shared between JMV, MultiMap allow for multiple values for the same key)
+* Distributed Lock (_to apply a lock on an object and share between JVM_)
+* Distributed Set
+* Distributed Map/MultiMap (_Maps are shared between JMV, MultiMap allow for multiple values for the same key_)
 * Distributed Transaction (_affect transactions on clustered objects, not database!_)
 
 h3. Configuration file *hazelcast.xml*
 
-You can modify *hazelcast.xml* to your need to create more Queues or Map and modify the default ExecutorService parameters.
+You can modify *hazelcast.xml* to your need to create more Queues or Map and modify the default ExecutorService parameters. Just copy the hazelcast.xml file from the module _conf_ directory to your application _conf_ directory.
 * Default name for the Map is "*default*"
 * Default name for the Queue is "*default*"
+
+h3. Hazelcast Object type that can be retreived via @@Named@ annotation
+
+* Queue
+* Topic
+* AtomicNumber
+* ExecutorService
+* Set
+* Map
+* MultiMap
+
+h3. Hazelcast Object type that can by retreived via @@Inject@ annotation
+
+* Map
+* List
+* Set
+* Transaction
+* ExecutorService
+* IdGenerator
+* Lock
+* Event
