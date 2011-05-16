@@ -38,11 +38,6 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 	private static HazelcastInstance instance;
 
 	@Override
-	public void enhance(ApplicationClass appClass) throws Exception {
-		new HazelcastEnhancer().enhanceThisClass(appClass);
-	}
-	
-	@Override
 	public void onApplicationStart() {
 		try {
 			if (instance == null) {
