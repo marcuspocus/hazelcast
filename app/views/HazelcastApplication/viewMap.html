@@ -1,0 +1,13 @@
+#{extends "HazelcastApplication/main.html" /}
+#{set title:'Map View' /}
+<div class="content ui-widget">
+	<h1 id="ui-widget-header">Map View</h1>
+	<table border="1" cellspacing="5" cellpadding="5">
+		<tr><th>Key</th><th>Value</th></tr>
+		#{list items: keys, as:'key'}
+		<tr>
+			<td>${key}</td><td>${map.get(key).raw()}</td>
+		</tr>
+		#{/list}
+	</table>
+</div>

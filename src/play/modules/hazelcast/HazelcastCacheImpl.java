@@ -6,30 +6,33 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import play.cache.CacheImpl;
 import play.exceptions.CacheException;
 
 import com.hazelcast.core.AtomicNumber;
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
 public class HazelcastCacheImpl implements CacheImpl {
 
-	private static HazelcastCacheImpl instance = new HazelcastCacheImpl();
-	private static HazelcastInstance manager;
+	private static HazelcastInstance manager;;
+	private static HazelcastCacheImpl instance;
 	private static IMap<String, Object> cache;
-	
-	
-	private HazelcastCacheImpl() {
-		manager = Hazelcast.getDefaultInstance();
-		cache = manager.getMap("default");
-	}
 
-	public static HazelcastCacheImpl getInstance() {
+	private HazelcastCacheImpl() {
+		this.manager = HazelcastPlugin.getHazel();
+		this.cache = manager.getMap("cache");
+	}
+	
+	public static HazelcastCacheImpl getInstance(){
+		if(instance == null){
+			instance = new HazelcastCacheImpl();
+		}
 		return instance;
 	}
-	
+
 	/**
 	 * Expiration is in SECONDS
 	 */
@@ -38,7 +41,7 @@ public class HazelcastCacheImpl implements CacheImpl {
 	}
 
 	public void clear() {
-		if(cache != null){
+		if (cache != null) {
 			try {
 				cache.clear();
 			} catch (Exception e) {
@@ -122,9 +125,9 @@ public class HazelcastCacheImpl implements CacheImpl {
 	}
 
 	public void stop() {
+		instance = null;
 		cache = null;
 		manager = null;
-		instance = null;
 	}
 
 	/**

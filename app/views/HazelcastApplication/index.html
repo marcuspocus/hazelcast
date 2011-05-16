@@ -3,15 +3,9 @@
 <div class="content ui-widget">
 	<h1 id="ui-widget-header">Instance Config</h1>
 	<ul>
-		<li>Implementation Used: ${implementation}</li>
+		<li>Cache Implementation Used: ${implementation}</li>
 	   	<li>Hazelcast Instance name is: ${name}</li>
 	   	<li>Hazelcast is listening on port ${port}</li>
-	</ul>
-	<h1 id="ui-widget-header">Maps</h1>
-	<ul>
-	   	#{list items: maps, as:'map'}
-		<li>${map.name}</li>
-		#{/list}
 	</ul>
 	<h1 id="ui-widget-header">Executors</h1>
 	<ul>
@@ -22,6 +16,24 @@
 		   <li> Max Size: ${executor.maxPoolSize}</li> 
 		   <li>Keepalive: ${executor.keepAliveSeconds}</li> 
 		</ul>
+		#{/list}
+	</ul>
+	<h1 id="ui-widget-header">Maps</h1>
+	<ul>
+	   	#{list items: maps, as:'map'}
+		<li><a href="@{viewMap(map.name)}">${map.name}</a></li>
+		#{/list}
+	</ul>
+	<h1 id="ui-widget-header">Queues</h1>
+	<ul>
+	   	#{list items: queues, as:'queue'}
+		<li>${queue.name}</li>
+		#{/list}
+	</ul>
+	<h1 id="ui-widget-header">Topics</h1>
+	<ul>
+	   	#{list items: topics, as:'topic'}
+		<li>${topic.name}</li>
 		#{/list}
 	</ul>
 </div>

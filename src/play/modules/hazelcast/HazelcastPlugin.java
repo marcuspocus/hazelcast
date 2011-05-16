@@ -1,5 +1,6 @@
 package play.modules.hazelcast;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -7,19 +8,22 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
 import play.Logger;
+import play.Play;
 import play.PlayPlugin;
+import play.classloading.ApplicationClasses.ApplicationClass;
 import play.inject.BeanSource;
 import play.inject.Injector;
 import play.inject.NamedBeanSource;
 import play.inject.NamedInjector;
-import play.mvc.Http.Request;
-import play.mvc.Http.Response;
 import play.mvc.Router;
+import play.vfs.VirtualFile;
 
+import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.AtomicNumber;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
+import com.hazelcast.core.ILock;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.IQueue;
 import com.hazelcast.core.ISet;
@@ -27,23 +31,32 @@ import com.hazelcast.core.ITopic;
 import com.hazelcast.core.IdGenerator;
 import com.hazelcast.core.MultiMap;
 import com.hazelcast.core.Transaction;
+import com.hazelcast.partition.PartitionService;
 
 public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBeanSource {
 
 	private static HazelcastInstance instance;
 
 	@Override
+	public void enhance(ApplicationClass appClass) throws Exception {
+		new HazelcastEnhancer().enhanceThisClass(appClass);
+	}
+	
+	@Override
 	public void onApplicationStart() {
 		try {
 			if (instance == null) {
-				instance = Hazelcast.getDefaultInstance();
-				if(!instance.getLifecycleService().isRunning()){
-					Logger.info("Hazelcast Services is restarting...\n");
-					instance.getLifecycleService().restart();
+				VirtualFile confXml = Play.getVirtualFile("conf/hazelcast.xml");
+				if(confXml != null){
+					Logger.info("Building Hazelcast Configuration for: %s", confXml.getName());
+					XmlConfigBuilder conf = new XmlConfigBuilder(confXml.inputstream());
+					instance = Hazelcast.newHazelcastInstance(conf.build());
+				}else{
+					Logger.info("Building Hazelcast Configuration using default values...");
+					instance = Hazelcast.newHazelcastInstance(null);
 				}
 				Logger.info("Hazelcast Services are now started...\n");
 			}
-
 		} catch (Exception e) {
 			throw new ExceptionInInitializerError(e);
 		}
@@ -51,11 +64,10 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 		NamedInjector.inject(this);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onApplicationStop() {
 		try {
-			instance.shutdown();
+			Hazelcast.shutdownAll();
 			instance = null;
 			Logger.info("Hazelcast Services are now stopped\n");
 		} catch (Exception e) {
@@ -64,18 +76,8 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 	}
 
 	@Override
-	public boolean rawInvocation(Request request, Response response) throws Exception {
-		if ("/@cache".equals(request.path)) {
-			response.status = 302;
-			response.setHeader("Location", "/@cache/");
-			return true;
-		}
-		return false;
-	}
-
-	@Override
 	public void onRoutesLoaded() {
-		Router.prependRoute("GET", "/@cache/?", "HazelcastApplication.index");
+		Router.prependRoute("GET", "/@hazel", "HazelcastApplication.index");
 	}
 
 	/*
@@ -92,6 +94,8 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 			return (T) instance.getExecutorService();
 		}else if(clazz.equals(Transaction.class)){
 			return (T) instance.getTransaction();
+		}else if(clazz.equals(PartitionService.class)){
+			return (T) instance.getPartitionService();
 		}
 		Logger.info("%s Injection...KO", clazz.getName());
 		return null;
@@ -123,5 +127,25 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 		Logger.info("%s Injection...KO", clazz.getName());
 		return null;
 	}
+	
+	public static HazelcastInstance getHazel(){
+		return instance;
+	}
+	
+	public static Transaction getTransaction(){
+		return instance.getTransaction();
+	}
 
+	public static ILock getLock(Object o){
+		return instance.getLock(o);
+	}
+
+	/*
+	public static void test(){
+		Transaction _hazelcastTransaction = instance.getTransaction();
+		if(_hazelcastTransaction.getStatus() != _hazelcastTransaction.TXN_STATUS_ACTIVE)_hazelcastTransaction.begin();
+		if(_hazelcastTransaction.getStatus() == _hazelcastTransaction.TXN_STATUS_ACTIVE)_hazelcastTransaction.commit();
+	}
+	*/
+	
 }

@@ -30,7 +30,7 @@ h2. Using standard Play! Framework Cache Mechanisms
 
 p. All the standard Play annotations can work with Hazelcast instead of EhCache or Memcached.
 
-See "Play Framework Cache Documentation":/@documentation/cache for *Cache.class* and annotations usage.
+See "Play Framework Cache Documentation":/@documentation/cache for *Cache* and annotations usage.
 
 
 h2. Using features from Hazelcast
@@ -65,8 +65,6 @@ h2. Hazelcast clustered services
 h3. Configuration file *hazelcast.xml*
 
 You can modify *hazelcast.xml* to your need to create more Queues or Map and modify the default ExecutorService parameters. Just copy the hazelcast.xml file from the module _conf_ directory to your application _conf_ directory.
-* Default name for the Map is "*default*"
-* Default name for the Queue is "*default*"
 
 h3. Hazelcast Object type that can be retreived via @@Named@ annotation
 
@@ -77,14 +75,12 @@ h3. Hazelcast Object type that can be retreived via @@Named@ annotation
 * Set
 * Map
 * MultiMap
+* IdGenerator
 
 h3. Hazelcast Object type that can by retreived via @@Inject@ annotation
 
-* Map
-* List
-* Set
 * Transaction
 * ExecutorService
-* IdGenerator
+* PartitionService
 * Lock
 * Event
