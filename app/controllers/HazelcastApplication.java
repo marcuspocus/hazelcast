@@ -1,33 +1,22 @@
 package controllers;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
 
+import play.Logger;
+import play.cache.Cache;
+import play.data.validation.Required;
+import play.mvc.Controller;
+
 import com.hazelcast.config.ExecutorConfig;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.QueueConfig;
 import com.hazelcast.config.TopicConfig;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IList;
-import com.hazelcast.core.IMap;
-import com.hazelcast.core.IQueue;
-import com.hazelcast.core.ITopic;
-import com.hazelcast.core.MessageListener;
-import com.hazelcast.core.Transaction;
-
-import play.Logger;
-import play.cache.Cache;
-import play.cache.CacheFor;
-import play.data.validation.Required;
-import play.modules.hazelcast.HazelTransaction;
-import play.modules.hazelcast.HazelcastPlugin;
-import play.mvc.Controller;
-import play.utils.Utils;
 
 public class HazelcastApplication extends Controller {
 
