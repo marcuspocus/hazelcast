@@ -1,7 +1,7 @@
 h1. Documentation for the Hazelcast module
 
 bq. This module is a @dropin@ replacement for EhCacheImpl or MemcachedImpl from Play. 
-It allow to have a clustered cache when you can't install a memcached server on your platform.
+It allow your application to have a clustered cache when you can't install a memcached server on your platform.
 It's also a great free open source *In-Memory Data Grid*
 
 See "Hazelcast Documentation":http://www.hazelcast.com/documentation.jsp for more details.
