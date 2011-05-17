@@ -1,7 +1,7 @@
 h1. Documentation for the Hazelcast module
 
-bq. This module is a dropin replacement for EhCacheImpl or MemcachedImpl from Play. 
-It allow primarily to have a clustered cache when you can't install a memcached server on your platform.
+bq. This module is a @dropin@ replacement for EhCacheImpl or MemcachedImpl from Play. 
+It allow to have a clustered cache when you can't install a memcached server on your platform.
 It's also a great free open source *In-Memory Data Grid*
 
 See "Hazelcast Documentation":http://www.hazelcast.com/documentation.jsp for more details.
@@ -82,5 +82,17 @@ h3. Hazelcast Object type that can by retreived via @@Inject@ annotation
 * Transaction
 * ExecutorService
 * PartitionService
-* Lock
 * Event
+
+h3. Method directly accessible on @HazelcastPlugin@ class
+
+* @HazelcastPlugin.getTransaction()@
+* @HazelcastPlugin.getLock(Object o)@
+
+h2. Roadmap
+
+p. I'd like to see some basic Play! features use Hazel capabilities:
+
+* Play! Jobs could use Hazelcast ExecutorService automaticaly
+* Having automatic transaction demarcation on the cluster using @@HazelTransaction@ annotations on methods
+* Etc...
