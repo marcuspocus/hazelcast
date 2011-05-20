@@ -1,4 +1,4 @@
-self: dev -> hazelcast 0.1
+self: play -> hazelcast 0.1
 
 require:
     - play
