@@ -10,6 +10,8 @@ import java.util.concurrent.ExecutorService;
 import play.Logger;
 import play.Play;
 import play.PlayPlugin;
+import play.cache.Cache;
+import play.cache.CacheImpl;
 import play.classloading.ApplicationClasses.ApplicationClass;
 import play.inject.BeanSource;
 import play.inject.Injector;
@@ -43,13 +45,19 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 				if(confXml != null){
 					Logger.info("Building Hazelcast Configuration for: %s", confXml.getName());
 					XmlConfigBuilder conf = new XmlConfigBuilder(confXml.inputstream());
-					instance = Hazelcast.newHazelcastInstance(conf.build());
+					instance = Hazelcast.init(conf.build());
 				}else{
 					Logger.info("Building Hazelcast Configuration using default values...");
 					instance = Hazelcast.newHazelcastInstance(null);
 				}
 				Logger.info("Hazelcast Services are now started...\n");
 			}
+			Logger.info("Replacing EhCacheImpl with HazelcastCacheImpl...");
+			Cache.stop();
+			Cache.forcedCacheImpl = (CacheImpl) HazelcastCacheImpl.getInstance();
+			Cache.init();
+			Logger.info("Cache Impl: %s", Cache.cacheImpl.getClass().getName());
+
 		} catch (Exception e) {
 			throw new ExceptionInInitializerError(e);
 		}

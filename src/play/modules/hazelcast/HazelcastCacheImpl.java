@@ -17,19 +17,18 @@ import com.hazelcast.core.IMap;
 
 public class HazelcastCacheImpl implements CacheImpl {
 
-	private static HazelcastInstance manager;;
-	private static HazelcastCacheImpl instance;
+	private static HazelcastInstance manager = HazelcastPlugin.getHazel();
+	private static HazelcastCacheImpl instance = new HazelcastCacheImpl();
 	private static IMap<String, Object> cache;
 
 	private HazelcastCacheImpl() {
-		this.manager = HazelcastPlugin.getHazel();
 		this.cache = manager.getMap("cache");
 	}
 	
-	public static HazelcastCacheImpl getInstance(){
-		if(instance == null){
-			instance = new HazelcastCacheImpl();
-		}
+	public synchronized static HazelcastCacheImpl getInstance(){
+		//if(instance == null){
+		//	instance = new HazelcastCacheImpl();
+		//}
 		return instance;
 	}
 
@@ -127,7 +126,7 @@ public class HazelcastCacheImpl implements CacheImpl {
 	public void stop() {
 		instance = null;
 		cache = null;
-		manager = null;
+		//manager = null;
 	}
 
 	/**

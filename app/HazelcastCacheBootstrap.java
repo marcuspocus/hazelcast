@@ -11,11 +11,13 @@ import play.modules.hazelcast.HazelcastPlugin;
 public class HazelcastCacheBootstrap extends Job<Void>{
 
 	public void doJob(){
+		/*
 		Logger.info("Replacing EhCacheImpl with HazelcastCacheImpl...");
 		Cache.stop();
 		Cache.forcedCacheImpl = (CacheImpl) HazelcastCacheImpl.getInstance();
 		Cache.init();
 		Logger.info("Cache Impl: %s", Cache.cacheImpl.getClass().getName());
+		*/
 	}
 	
 }

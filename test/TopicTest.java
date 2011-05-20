@@ -1,5 +1,6 @@
 import org.junit.Test;
 
+import play.modules.hazelcast.HazelcastPlugin;
 import play.test.UnitTest;
 
 import com.hazelcast.core.Hazelcast;
@@ -11,7 +12,7 @@ import com.hazelcast.core.Transaction;
 
 public class TopicTest extends UnitTest{
 
-	private static HazelcastInstance hazel = Hazelcast.getDefaultInstance();
+	private HazelcastInstance hazel = HazelcastPlugin.getHazel();
 	
 	@Test
 	public void testTopicSend(){

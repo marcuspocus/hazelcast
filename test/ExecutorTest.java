@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import org.junit.Test;
 
 import play.Logger;
+import play.modules.hazelcast.HazelcastPlugin;
 import play.test.UnitTest;
 
 import com.hazelcast.core.Hazelcast;
@@ -19,7 +20,7 @@ import com.hazelcast.core.IdGenerator;
 
 public class ExecutorTest extends UnitTest implements Serializable{
 
-	HazelcastInstance hazel = Hazelcast.getDefaultInstance();
+	private HazelcastInstance hazel = HazelcastPlugin.getHazel();
 
 	public class MyRunnable implements Runnable, Serializable {
 		

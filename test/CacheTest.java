@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import play.cache.Cache;
+import play.modules.hazelcast.HazelcastCacheImpl;
 import play.test.UnitTest;
 
 
@@ -18,12 +19,18 @@ public class CacheTest extends UnitTest {
 	public void after(){
 		Cache.clear();
 	}
+	
+	@Test
+	public void testCacheName(){
+		String cacheName = Cache.cacheImpl.getClass().getName();
+		assertEquals("Instance Cache is NOT OK", HazelcastCacheImpl.class.getName(), cacheName);
+	}
 
 	@Test
 	public void testCache(){
-		Cache.add("test", "bidon");
+		Cache.add("test", "bidon de daube");
 		String test = Cache.get("test", String.class);
-		assertEquals("bidon", test);
+		assertEquals("bidon de daube", test);
 	}
 	
 	@Test
