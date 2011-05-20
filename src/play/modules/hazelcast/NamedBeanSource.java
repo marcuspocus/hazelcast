@@ -1,4 +1,4 @@
-package play.inject;
+package play.modules.hazelcast;
 import play.inject.BeanSource;
 
 

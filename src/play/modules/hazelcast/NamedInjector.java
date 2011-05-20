@@ -1,4 +1,4 @@
-package play.inject;
+package play.modules.hazelcast;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

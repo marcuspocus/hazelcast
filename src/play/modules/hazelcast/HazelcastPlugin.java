@@ -13,8 +13,6 @@ import play.PlayPlugin;
 import play.classloading.ApplicationClasses.ApplicationClass;
 import play.inject.BeanSource;
 import play.inject.Injector;
-import play.inject.NamedBeanSource;
-import play.inject.NamedInjector;
 import play.mvc.Router;
 import play.vfs.VirtualFile;
 
