@@ -105,5 +105,5 @@ h2. Roadmap
 p. I'd like to see some basic Play! features use Hazel capabilities:
 
 * Play! Jobs could use Hazelcast ExecutorService automaticaly
-* Having automatic transaction demarcation on the cluster using @@HazelTransaction@ annotations on methods
+* Integrating Hazelcast with my other upcoming module "Camel":http://myuri.me/3VAE for "EIP":http://myuri.me/3Vh8
 * Etc...
