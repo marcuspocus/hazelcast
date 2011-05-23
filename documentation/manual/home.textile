@@ -28,28 +28,28 @@ bc.. require:
 
 h2. Using standard Play! Framework Cache Mechanisms
 
-p. All the standard Play annotations or methods work seamlessly with Hazelcast instead of EhCache or Memcached.
+p. All the standard Play annotations or methods work seamlessly with *Hazelcast* instead of *EhCache* or *Memcached*.
 
-* @@CacheFor("1h")@
+* @CacheFor("1h")@
 * @Cache.xxx()@
 * Etc...
 
-bq. See "Play Framework Cache Documentation":/@documentation/cache for *@@CacheFor@* and provided Play! *@Cache.xxx()@* usage.
+bq. See "Play Framework Cache Documentation":/@documentation/cache for @CacheFor("1h")@ and provided Play! @Cache.xxx()@ usage.
 
 
 h2. Using features from Hazelcast
 
-h3. Using @Inject to inject an instance of Hazelcast in your controller
+h3. Using @Inject to inject an instance of *Hazelcast* in your controller
 
-bc. @Inject private static HazelcastInstance hazel;
+bc(Java). @Inject private static HazelcastInstance hazel;
 
 h3. Injecting the default ExecutorService
 
-bc. @Inject private static ExecutorService executor;
+bc(Java). @Inject private static ExecutorService executor;
 
 h3. Using @Named to inject a named resource 
 
-bc. @Named("MyQueue") private static Queue myQueue;
+bc(Java). @Named("MyQueue") private static Queue myQueue;
 
 
 h2. Hazelcast clustered services
@@ -68,7 +68,7 @@ h2. Hazelcast clustered services
 
 h3. Configuration file *hazelcast.xml*
 
-You can modify *hazelcast.xml* to your need to create more Queues or Map and modify the default ExecutorService parameters. Just copy the hazelcast.xml file from the module _conf_ directory to your application _conf_ directory.
+You can modify *hazelcast.xml* to your need to create more Queues or Map and modify the default ExecutorService parameters. Just copy the hazelcast.xml file from the module _conf_ directory to your application _conf_ directory. This is also the file that allow you to change from multicast to TCPIP static cluster definition.
 
 h3. Hazelcast Object type that can be retreived via @@Named@ annotation
 
