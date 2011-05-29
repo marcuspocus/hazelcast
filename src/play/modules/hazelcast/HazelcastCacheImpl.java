@@ -26,9 +26,9 @@ public class HazelcastCacheImpl implements CacheImpl {
 	}
 	
 	public synchronized static HazelcastCacheImpl getInstance(){
-		//if(instance == null){
-		//	instance = new HazelcastCacheImpl();
-		//}
+		if(instance == null){
+			instance = new HazelcastCacheImpl();
+		}
 		return instance;
 	}
 
