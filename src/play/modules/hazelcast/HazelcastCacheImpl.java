@@ -26,6 +26,9 @@ public class HazelcastCacheImpl implements CacheImpl {
 	}
 	
 	public synchronized static HazelcastCacheImpl getInstance(){
+		if(manager == null){
+			manager = HazelcastPlugin.getHazel();
+		}
 		if(instance == null){
 			instance = new HazelcastCacheImpl();
 		}
@@ -126,7 +129,7 @@ public class HazelcastCacheImpl implements CacheImpl {
 	public void stop() {
 		instance = null;
 		cache = null;
-		//manager = null;
+		manager = null;
 	}
 
 	/**

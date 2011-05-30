@@ -1,11 +1,12 @@
-self: play -> hazelcast 0.2
+self: play -> hazelcast 0.2.1
 
 require:
     - play
-    - com.hazelcast -> hazelcast-all 1.9.2:
+    - com.hazelcast -> hazelcast-all 1.9.3:
         exclude:
             - junit-addons -> junit-addons 1.4
             - xerces -> xercesImpl 2.6.2
             - xerces -> xmlParserAPIs 2.6.2
             - org.mockito -> mockito-all 1.8.2
-            - com.hazelcast -> hazelcast-hibernate 1.9.2
+            - com.hazelcast -> hazelcast-hibernate 1.9.3
+            - com.hazelcast -> hazelcast-spring 1.9.3
