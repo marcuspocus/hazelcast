@@ -98,7 +98,6 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 		}else if(clazz.equals(PartitionService.class)){
 			return (T) instance.getPartitionService();
 		}
-		Logger.info("%s Injection...KO", clazz.getName());
 		return null;
 	}
 
@@ -125,7 +124,6 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 		}else if(clazz.equals(ITopic.class)){
 			return (T) instance.getTopic(name);
 		}
-		Logger.info("%s Injection...KO", clazz.getName());
 		return null;
 	}
 	
@@ -140,13 +138,5 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 	public static ILock getLock(Object o){
 		return instance.getLock(o);
 	}
-
-	/*
-	public static void test(){
-		Transaction _hazelcastTransaction = instance.getTransaction();
-		if(_hazelcastTransaction.getStatus() != _hazelcastTransaction.TXN_STATUS_ACTIVE)_hazelcastTransaction.begin();
-		if(_hazelcastTransaction.getStatus() == _hazelcastTransaction.TXN_STATUS_ACTIVE)_hazelcastTransaction.commit();
-	}
-	*/
 	
 }
