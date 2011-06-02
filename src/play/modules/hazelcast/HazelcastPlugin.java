@@ -1,6 +1,5 @@
 package play.modules.hazelcast;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -12,9 +11,7 @@ import play.Play;
 import play.PlayPlugin;
 import play.cache.Cache;
 import play.cache.CacheImpl;
-import play.classloading.ApplicationClasses.ApplicationClass;
 import play.inject.BeanSource;
-import play.inject.Injector;
 import play.mvc.Router;
 import play.vfs.VirtualFile;
 
@@ -97,8 +94,9 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 			return (T) instance.getTransaction();
 		}else if(clazz.equals(PartitionService.class)){
 			return (T) instance.getPartitionService();
+		}else{
+			return null;
 		}
-		return null;
 	}
 
 	/* (non-Javadoc)
@@ -123,8 +121,9 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 			return (T) instance.getQueue(name);
 		}else if(clazz.equals(ITopic.class)){
 			return (T) instance.getTopic(name);
+		}else{
+			return null;
 		}
-		return null;
 	}
 	
 	public static HazelcastInstance getHazel(){
