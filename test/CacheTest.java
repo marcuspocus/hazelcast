@@ -99,13 +99,13 @@ public class CacheTest extends UnitTest {
 	
 	@Test
 	public void testExpiration(){
-		Cache.add("testExpiration", "testExpiration", "5s");
+		Cache.add("testExpiration", "testExpiration", "1s");
 		try {
 			Thread.sleep(5000);
 		} catch (Exception e) {
 		}
 		String actual = Cache.get("testExpiration", String.class);
-		assertNull(actual);
+		assertNull(String.format("actual: %s", actual), actual);
 	}
 	
 }
