@@ -1,5 +1,6 @@
 package play.modules.hazelcast;
 
+import java.io.NotActiveException;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -15,6 +16,7 @@ import play.inject.BeanSource;
 import play.mvc.Router;
 import play.vfs.VirtualFile;
 
+import com.hazelcast.config.Config;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.AtomicNumber;
 import com.hazelcast.core.Hazelcast;
@@ -34,15 +36,25 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 
 	private static HazelcastInstance instance;
 
+	public static boolean disabled = Boolean.parseBoolean(Play.configuration.getProperty("hazelcast.disabled", "false"));
+
 	@Override
 	public void onApplicationStart() {
+		if(disabled){
+			return;
+		}
+
 		try {
 			if (instance == null) {
 				VirtualFile confXml = Play.getVirtualFile("conf/hazelcast.xml");
 				if(confXml != null){
 					Logger.info("Building Hazelcast Configuration for: %s", confXml.getName());
-					XmlConfigBuilder conf = new XmlConfigBuilder(confXml.inputstream());
-					instance = Hazelcast.init(conf.build());
+					XmlConfigBuilder xConf = new XmlConfigBuilder(confXml.inputstream());
+					Config conf = xConf.build();
+					conf.setProperty("hazelcast.jmx", "true");
+					conf.setProperty("hazelcast.jmx.detailed", "true");
+					conf.setProperty("hazelcast.shutdownhook.enabled", "true");
+					instance = Hazelcast.init(conf);
 				}else{
 					Logger.info("Building Hazelcast Configuration using default values...");
 					instance = Hazelcast.newHazelcastInstance(null);
@@ -64,6 +76,9 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 	
 	@Override
 	public void onApplicationStop() {
+		if(disabled){
+			return;
+		}
 		try {
 			Hazelcast.shutdownAll();
 			instance = null;
@@ -75,6 +90,9 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 
 	@Override
 	public void onRoutesLoaded() {
+		if(disabled){
+			return;
+		}
 		Router.prependRoute("GET", "/@hazel", "HazelcastApplication.index");
 	}
 
@@ -127,14 +145,23 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 	}
 	
 	public static HazelcastInstance getHazel(){
+		if(disabled){
+			throw new RuntimeException("CamelPlugin is disabled!");
+		}
 		return instance;
 	}
 	
 	public static Transaction getTransaction(){
+		if(disabled){
+			throw new RuntimeException("CamelPlugin is disabled!");
+		}
 		return instance.getTransaction();
 	}
 
 	public static ILock getLock(Object o){
+		if(disabled){
+			throw new RuntimeException("CamelPlugin is disabled!");
+		}
 		return instance.getLock(o);
 	}
 	
