@@ -54,7 +54,11 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 					conf.setProperty("hazelcast.jmx", "true");
 					conf.setProperty("hazelcast.jmx.detailed", "true");
 					conf.setProperty("hazelcast.shutdownhook.enabled", "true");
-					instance = Hazelcast.init(conf);
+					try {
+						instance = Hazelcast.init(conf);
+					} catch (IllegalStateException e) {
+						instance = Hazelcast.getDefaultInstance();
+					}
 				}else{
 					Logger.info("Building Hazelcast Configuration using default values...");
 					instance = Hazelcast.newHazelcastInstance(null);
