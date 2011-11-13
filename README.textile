@@ -108,6 +108,38 @@ fn2. Use this to lock an object across the cluster.
 
 fn3. Use this if you absolutly _NEED_ to directly get the Default Hazelcast instance.
 
+h2. Hibernate second level cache configuration
+
+* application.conf
+<code>hibernate.cache.region.factory_class=com.hazelcast.hibernate.HazelcastCacheRegionFactory</code>
+<code>hibernate.cache.use_query_cache=false</code>
+<code>hibernate.cache.use_minimal_puts=true</code>
+<code>hibernate.cache.use_second_level_cache=true</code>
+<code>hibernate.cache.region_prefix=myApp</code>
+<code>hibernate.cache.use_structured_entries=true</code>
+
+
+* dependencies.yml
+<code># Application dependencies</code>
+<code>require:</code>
+<code>    - play</code>
+<code>    - play -> hazelcast 0.3</code>
+<code>    - com.hazelcast -> hazelcast-hibernate 1.9.4.4</code>
+
+
+* Entity class annotation
+<code>@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "model")</code>
+
+* hazelcast.xml - add following map definition
+<code><map name="myApp.model"></code>
+<code>    <backup-count>1</backup-count></code>
+<code>    <time-to-live-seconds>0</time-to-live-seconds></code>
+<code>    <max-idle-seconds>3600</max-idle-seconds></code>
+<code>    <eviction-policy>LRU</eviction-policy></code>
+<code>    <max-size policy="cluster_wide_map_size">10000</max-size></code>
+<code>    <eviction-percentage>25</eviction-percentage></code>
+<code></map></code>
+
 h2. Roadmap
 
 p. I'd like to see some basic Play! features use Hazel capabilities:
