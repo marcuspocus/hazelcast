@@ -150,21 +150,21 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 	
 	public static HazelcastInstance getHazel(){
 		if(disabled){
-			throw new RuntimeException("CamelPlugin is disabled!");
+			throw new RuntimeException("HazelcastPlugin is disabled!");
 		}
 		return instance;
 	}
 	
 	public static Transaction getTransaction(){
 		if(disabled){
-			throw new RuntimeException("CamelPlugin is disabled!");
+			throw new RuntimeException("HazelcastPlugin is disabled!");
 		}
 		return instance.getTransaction();
 	}
 
 	public static ILock getLock(Object o){
 		if(disabled){
-			throw new RuntimeException("CamelPlugin is disabled!");
+			throw new RuntimeException("HazelcastPlugin is disabled!");
 		}
 		return instance.getLock(o);
 	}
