@@ -68,7 +68,7 @@ h2. Hazelcast clustered services
 * Distributed AtomicNumber provider
 * Distributed ExecutorService
 * Distributed ID Generator (_ID are UNIQUE in all cluster nodes_)
-* Distributed List (to share a list in the cluster between many JVM)
+* Distributed List (_to share a list in the cluster between many JVM_)
 * Distributed Lock (_to apply a lock on an object and share between JVM_)
 * Distributed Set
 * Distributed Map/MultiMap (_Maps are shared between JMV, MultiMap allow for multiple values for the same key_)
@@ -123,7 +123,7 @@ h2. Hibernate second level cache configuration
 <code># Application dependencies</code>
 <code>require:</code>
 <code>    - play</code>
-<code>    - play -> hazelcast 0.3</code>
+<code>    - play -> hazelcast 0.4</code>
 <code>    - com.hazelcast -> hazelcast-hibernate 1.9.4.4</code>
 
 
