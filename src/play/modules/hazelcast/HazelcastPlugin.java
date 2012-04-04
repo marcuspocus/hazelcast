@@ -46,7 +46,8 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
 
 		try {
 			if (instance == null) {
-				VirtualFile confXml = Play.getVirtualFile("conf/hazelcast.xml");
+				final String configFile = Play.configuration.getProperty("hazelcast.configFile", "conf/hazelcast.xml");
+				VirtualFile confXml = Play.getVirtualFile(configFile);
 				if(confXml != null){
 					Logger.info("Building Hazelcast Configuration for: %s", confXml.getName());
 					XmlConfigBuilder xConf = new XmlConfigBuilder(confXml.inputstream());
