@@ -1,12 +1,14 @@
+import java.util.Iterator;
+
 import org.junit.Test;
 
 import play.Logger;
 import play.modules.hazelcast.HazelcastPlugin;
 import play.test.UnitTest;
 
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IQueue;
+import com.hazelcast.core.ItemEvent;
 import com.hazelcast.core.ItemListener;
 import com.hazelcast.core.Transaction;
 
@@ -21,12 +23,14 @@ public class QueueTest extends UnitTest{
 		IQueue<String> queue = hazel.getQueue("testQueueSend");
 		queue.addItemListener(new ItemListener<String>() {
 			
-			public void itemRemoved(String msg) {
-				Logger.info("Removed msg: %s", msg);
+			@Override
+			public void itemAdded(ItemEvent<String> msg) {
+				Logger.info("Added msg: %s", msg.getItem());
 			}
-			
-			public void itemAdded(String msg) {
-				Logger.info("Added msg: %s", msg);
+
+			@Override
+			public void itemRemoved(ItemEvent<String> msg) {
+				Logger.info("Removed msg: %s", msg.getItem());
 			}
 		},true);
 		
@@ -48,12 +52,14 @@ public class QueueTest extends UnitTest{
 		IQueue<String> queue = hazel.getQueue("testQueueSend");
 		queue.addItemListener(new ItemListener<String>() {
 			
-			public void itemRemoved(String msg) {
-				Logger.info("Removed msg: %s", msg);
+			@Override
+			public void itemAdded(ItemEvent<String> msg) {
+				Logger.info("Added msg: %s", msg.getItem());
 			}
-			
-			public void itemAdded(String msg) {
-				Logger.info("Added msg: %s", msg);
+
+			@Override
+			public void itemRemoved(ItemEvent<String> msg) {
+				Logger.info("Removed msg: %s", msg.getItem());
 			}
 		},true);
 		
@@ -63,8 +69,8 @@ public class QueueTest extends UnitTest{
 		tx.commit();
 		tx = hazel.getTransaction();
 		tx.begin();
-		for(String item : queue){
-			queue.remove(item);
+		for(Iterator<String> iterator = queue.iterator(); iterator.hasNext();){
+			queue.remove(iterator.next());
 		}
 		tx.commit();
 	}
