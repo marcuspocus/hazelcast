@@ -32,7 +32,11 @@ You can disable the module in your application by usinga  parameter in @applicat
 
 bc. hazelcast.disabled=true
 
-The value default to false.
+The value defaults to false.
+
+bc. hazelcast.configFile=conf/hazelcast-dev.xml
+
+You can specify the configuration file to be used. The value defaults to conf/hazelcast.xml
 
 h2. Using standard Play! Framework Cache Mechanisms
 

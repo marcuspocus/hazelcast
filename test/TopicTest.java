@@ -3,9 +3,9 @@ import org.junit.Test;
 import play.modules.hazelcast.HazelcastPlugin;
 import play.test.UnitTest;
 
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
+import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
 import com.hazelcast.core.Transaction;
 
@@ -19,8 +19,9 @@ public class TopicTest extends UnitTest{
 		ITopic<String> topic = hazel.getTopic("myTopic");
 		topic.publish("testTopicSend");
 		topic.addMessageListener(new MessageListener<String>() {
-			public void onMessage(String msg) {
-				assertEquals("testTopicSend", msg);
+			@Override
+			public void onMessage(Message<String> msg) {
+				assertEquals("testTopicSend", msg.getMessageObject());
 			}
 		});
 	}
@@ -33,11 +34,11 @@ public class TopicTest extends UnitTest{
 		topic.publish("testTopicSendTx");
 		tx.commit();
 		topic.addMessageListener(new MessageListener<String>() {
-			public void onMessage(String msg) {
-				assertEquals("testTopicSendTx", msg);
+			@Override
+			public void onMessage(Message<String> msg) {
+				assertEquals("testTopicSendTx", msg.getMessageObject());
 			}
 		});
-		
 	}
 	
 	@Test
@@ -48,8 +49,9 @@ public class TopicTest extends UnitTest{
 		topic.publish("testTopicSendTx");
 		tx.rollback();
 		topic.addMessageListener(new MessageListener<String>() {
-			public void onMessage(String msg) {
-				assertEquals("testTopicSendTx", msg);
+			@Override
+			public void onMessage(Message<String> msg) {
+				assertEquals("testTopicSendTx", msg.getMessageObject());
 			}
 		});
 	}
