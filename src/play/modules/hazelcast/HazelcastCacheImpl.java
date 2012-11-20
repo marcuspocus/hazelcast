@@ -63,8 +63,9 @@ public class HazelcastCacheImpl implements CacheImpl {
 	}
 
 	public Object get(String key) {
-		return cache.get(key);
+		return cache.get(key) == null ? getAtomicValue(key) : cache.get(key);
 	}
+
 
 	public Map<String, Object> get(String[] keys) {
 		Map<String, Object> result = new HashMap<String, Object>(keys.length);
@@ -130,6 +131,10 @@ public class HazelcastCacheImpl implements CacheImpl {
 		instance = null;
 		cache = null;
 		manager = null;
+	}
+
+	public Number getAtomicValue(String key) {
+		return manager.getAtomicNumber(key).get();
 	}
 
 	/**
