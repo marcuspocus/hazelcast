@@ -110,7 +110,7 @@ fn1. Use this to get a Transaction object then you can @begin()@ or @commit()@ o
 
 fn2. Use this to lock an object across the cluster.
 
-fn3. Use this if you absolutly _NEED_ to directly get the Default Hazelcast instance.
+fn3. Use this if you absolutely _NEED_ to directly get the Default Hazelcast instance.
 
 h2. Hibernate second level cache configuration
 
