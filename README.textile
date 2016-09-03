@@ -28,7 +28,7 @@ bc.. require:
 
 h3. Parameters
 
-You can disable the module in your application by usinga  parameter in @application.conf@:
+You can disable the module in your application by using a  parameter in @application.conf@:
 
 bc. hazelcast.disabled=true
 

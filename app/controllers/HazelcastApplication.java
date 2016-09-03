@@ -24,24 +24,24 @@ public class HazelcastApplication extends Controller {
 	private static HazelcastInstance hazel;
 
 	public static void index() {
-		Logger.info("Compteur: %s", hazel.getAtomicNumber("test").addAndGet(1));
+		Logger.info("Compteur: %s", hazel.getAtomicLong("test").addAndGet(1));
 		String implementation = Cache.cacheImpl.getClass().getName();
 		String name = hazel.getName();
-		String port = "" + hazel.getConfig().getPort();
+		String port = "" + hazel.getConfig().getNetworkConfig().getPort();
 		
 		hazel.getList("myList");
 		hazel.getQueue("myQueue");
 		hazel.getMap("myMap");
 		hazel.getTopic("myTopic");
-		hazel.getAtomicNumber("myAtomicNumber");
+		hazel.getAtomicLong("myAtomicNumber");
 		hazel.getExecutorService("myExecutorService");
 		hazel.getIdGenerator("myIdGenerator");
 		hazel.getMultiMap("myMultiMap");
 		hazel.getSet("mySet");
 
 		List<MapConfig> maps = new ArrayList<MapConfig>(hazel.getConfig().getMapConfigs().values());
-		List<ExecutorConfig> executors = new ArrayList<ExecutorConfig>(hazel.getConfig().getExecutorConfigs());
-		List<QueueConfig> queues = new ArrayList<QueueConfig>(hazel.getConfig().getQConfigs().values());
+		List<ExecutorConfig> executors = new ArrayList<ExecutorConfig>(hazel.getConfig().getExecutorConfigs().values());
+		List<QueueConfig> queues = new ArrayList<QueueConfig>(hazel.getConfig().getQueueConfigs().values());
 		List<TopicConfig> topics = new ArrayList<TopicConfig>(hazel.getConfig().getTopicConfigs().values());
 
 		render(implementation, name, port, maps, executors, queues, topics);
