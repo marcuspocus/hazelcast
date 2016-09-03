@@ -4,7 +4,7 @@ bq. This module is a @dropin@ replacement for EhCacheImpl or MemcachedImpl from 
 It allow your application to have a clustered cache when you can't install a memcached server on your platform.
 It's also a great free open source *In-Memory Data Grid*
 
-See "Hazelcast Documentation":http://www.hazelcast.com/documentation.jsp for more details.
+See "Hazelcast Documentation":https://hazelcast.org/documentation for more details.
 
 h2. Installing Hazelcast Module
 
