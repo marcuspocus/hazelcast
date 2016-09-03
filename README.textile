@@ -35,6 +35,7 @@ bc. hazelcast.disabled=true
 The value defaults to false.
 
 You need to disabled the default embedded version for production deployments.
+
 bc. hazelcast.embedded=false
 
 Provide a valid config file when not using embedded version.
