@@ -72,7 +72,7 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
             }
             Logger.info("Configuring HazelcastCacheImpl as default cache...");
             Cache.stop();
-            Cache.forcedCacheImpl = (CacheImpl) HazelcastCacheImpl.getInstance();
+            Cache.forcedCacheImpl = HazelcastCacheImpl.getInstance();
             Cache.init();
             Logger.info("Cache Impl: %s", Cache.cacheImpl.getClass().getName());
         } catch (Exception e) {
@@ -116,6 +116,9 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
      */
     @SuppressWarnings("unchecked")
     public <T> T getBeanOfType(Class<T> clazz) {
+        if (disabled) {
+            throw new RuntimeException("HazelcastPlugin is disabled!");
+        }
         if (clazz.equals(HazelcastInstance.class)) {
             Logger.info("%s Injection...OK", clazz.getName());
             return (T) instance;
@@ -131,6 +134,9 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
      * @see play.inject.NamedBeanSource#getBeanOfType(java.lang.Class, java.lang.String)
      */
     public <T> T getBeanOfType(Class<T> clazz, String name) {
+        if (disabled) {
+            throw new RuntimeException("HazelcastPlugin is disabled!");
+        }
         if (clazz.equals(IMap.class) || clazz.equals(Map.class)) {
             return (T) instance.getMap(name);
         } else if (clazz.equals(IList.class) || clazz.equals(List.class)) {
@@ -173,15 +179,27 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
         return instance.getLock(name);
     }
     public static ITopic getTopic(String name) {
+        if (disabled) {
+            throw new RuntimeException("HazelcastPlugin is disabled!");
+        }
         return instance.getTopic(name);
     }
     public static <T> ITopic<T> getTopic(String name, Class<T> cls) {
+        if (disabled) {
+            throw new RuntimeException("HazelcastPlugin is disabled!");
+        }
         return instance.getTopic(name);
     }
     public static IMap getMap(String name) {
+        if (disabled) {
+            throw new RuntimeException("HazelcastPlugin is disabled!");
+        }
         return instance.getMap(name);
     }
     public static <K, T> IMap<K, T> getMap(String name, Class<K> keyType, Class<T> valueType) {
+        if (disabled) {
+            throw new RuntimeException("HazelcastPlugin is disabled!");
+        }
         return instance.getMap(name);
     }
 }
