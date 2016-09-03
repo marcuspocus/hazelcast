@@ -19,7 +19,6 @@ import play.Logger;
 import play.Play;
 import play.PlayPlugin;
 import play.cache.Cache;
-import play.cache.CacheImpl;
 import play.inject.BeanSource;
 import play.mvc.Router;
 import play.vfs.VirtualFile;
@@ -115,6 +114,7 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
      * @see play.inject.BeanSource#getBeanOfType(java.lang.Class)
      */
     @SuppressWarnings("unchecked")
+    @Override
     public <T> T getBeanOfType(Class<T> clazz) {
         if (disabled) {
             throw new RuntimeException("HazelcastPlugin is disabled!");
@@ -133,6 +133,7 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
     /* (non-Javadoc)
      * @see play.inject.NamedBeanSource#getBeanOfType(java.lang.Class, java.lang.String)
      */
+    @Override
     public <T> T getBeanOfType(Class<T> clazz, String name) {
         if (disabled) {
             throw new RuntimeException("HazelcastPlugin is disabled!");

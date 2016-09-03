@@ -17,7 +17,7 @@ public class NamedInjector {
     /**
      * For now, inject beans in controllers
      */
-    public static void inject(NamedBeanSource source) {
+    public static void inject(final NamedBeanSource source) {
         List<Class> classes = Play.classloader.getAssignableClasses(ControllerSupport.class);
         classes.addAll(Play.classloader.getAssignableClasses(Mailer.class));
         classes.addAll(Play.classloader.getAssignableClasses(Job.class));
