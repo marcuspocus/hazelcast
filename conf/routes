@@ -8,3 +8,4 @@
 #GET     /?                      HazelcastApplication.index
 
 GET     /play-hazelcast/       	staticDir:public-hazelcast
+

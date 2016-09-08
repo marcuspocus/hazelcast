@@ -4,7 +4,7 @@ bq. This module is a @dropin@ replacement for EhCacheImpl or MemcachedImpl from 
 It allow your application to have a clustered cache when you can't install a memcached server on your platform.
 It's also a great free open source *In-Memory Data Grid*
 
-See "Hazelcast Documentation":http://www.hazelcast.com/documentation.jsp for more details.
+See "Hazelcast Documentation":https://hazelcast.org/documentation for more details.
 
 h2. Installing Hazelcast Module
 
@@ -28,11 +28,17 @@ bc.. require:
 
 h3. Parameters
 
-You can disable the module in your application by usinga  parameter in @application.conf@:
+You can disable the module in your application by using a  parameter in @application.conf@:
 
 bc. hazelcast.disabled=true
 
 The value defaults to false.
+
+You need to disabled the default embedded version for production deployments.
+
+bc. hazelcast.embedded=false
+
+Provide a valid config file when not using embedded version.
 
 bc. hazelcast.configFile=conf/hazelcast-dev.xml
 
