@@ -86,6 +86,7 @@ public class HazelcastPlugin extends PlayPlugin implements BeanSource, NamedBean
         config.setProperty("hazelcast.jmx", Play.configuration.getProperty("hazelcast.jmx", "true"));
         config.setProperty("hazelcast.jmx.detailed", Play.configuration.getProperty("hazelcast.jmx.detailed", "true"));
         config.setProperty("hazelcast.shutdownhook.enabled", Play.configuration.getProperty("hazelcast.shutdownhook.enabled", "true"));
+        config.setClassLoader(Play.classloader);
         instance = Hazelcast.newHazelcastInstance(config);
     }
     @Override
